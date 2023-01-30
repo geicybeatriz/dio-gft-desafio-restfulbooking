@@ -8,7 +8,7 @@ public class User {
     private String password;
     private String phone;
 
-    public User (String userName, String passWord, String firstName, String lastName, String emailAddress, String phoneNumber){
+    public User (String userName, String firstName, String lastName, String emailAddress, String passWord, String phoneNumber){
         this.username = userName;
         this.firstname = firstName;
         this.lastname = lastName;
