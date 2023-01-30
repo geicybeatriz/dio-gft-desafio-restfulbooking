@@ -9,7 +9,6 @@ public class BookingDates {
     public BookingDates(String checkIn, String checkOut ){
         this.checkin = checkIn;
         this.checkout = checkOut;
-
     }
 
     public String getCheckIn() {

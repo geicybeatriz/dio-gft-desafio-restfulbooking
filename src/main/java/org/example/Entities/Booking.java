@@ -50,6 +50,14 @@ public class Booking {
         this.depositpaid = depositPaid;
     }
 
+    public BookingDates getBookingDates() {
+        return bookingdates;
+    }
+
+    public void setBookingDates(BookingDates bookingDates) {
+        this.bookingdates = bookingDates;
+    }
+
     public String getAdditionalNeeds() {
         return additionalneeds;
     }

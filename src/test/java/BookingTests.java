@@ -5,6 +5,7 @@ import io.restassured.filter.log.ErrorLoggingFilter;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
+import io.restassured.module.jsv.JsonSchemaValidator;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.example.Entities.Booking;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.*;
 
 public class BookingTests {
     private static Faker faker;
@@ -68,6 +70,33 @@ public class BookingTests {
 
         Assertions.assertNotNull(response);
         Assertions.assertEquals(200, response.statusCode());
+    }
+
+    @Test
+    public void getAllBookingsByUserFirstname_BookingExists_returnOk(){
+        request
+                .when()
+                    .queryParam("firstName", "Beatriz")
+                    .get("/booking")
+                .then()
+                    .assertThat()
+                    .statusCode(200)
+                    .contentType(ContentType.JSON)
+                .and().body("results", hasSize(greaterThan(0)));
+    }
+
+    @Test
+    public void createBooking_WithValidData_returnCreated(){
+        Booking test = booking;
+        given()
+                .config(RestAssured.config().logConfig(LogConfig.logConfig().enableLoggingOfRequestAndResponseIfValidationFails()))
+                .contentType(ContentType.JSON)
+                .when()
+                    .body(test)
+                    .post("/booking")
+                .then().body(JsonSchemaValidator.matchesJsonSchemaInClasspath("createBookingSchema.json"))
+                .and().assertThat().statusCode(200).contentType(ContentType.JSON)
+                .and().time(lessThan(2000L));
     }
 
 
